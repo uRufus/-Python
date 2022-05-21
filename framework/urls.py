@@ -14,3 +14,4 @@ def url_map(path):
     if path in paths:
         return f'{TEMPLATE_PATH}{paths[path]}'
     return f'{TEMPLATE_PATH}{paths["/"]}'
+

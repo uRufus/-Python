@@ -15,6 +15,7 @@ def render(template_name, **kwargs):
         # рендерим шаблон с параметрами
     return template.render(**kwargs)
 
+
 if __name__ == '__main__':
     # Пример использования
     output_test = render('templates/authors.html', object_list=[{'name': 'Leo'}, {'name':

@@ -1,5 +1,4 @@
 import json
-
 from templator import render
 from urls import url_map
 
