@@ -1,6 +1,6 @@
 import json
-from templator import render
-from urls import url_map
+from framework.templator import render
+from framework.url import url_map
 
 
 def control_func(method, path, body=None):
