@@ -1,6 +1,6 @@
 from pprint import pprint
 from framework.request import Request
-from framework.controller import control_func
+# from framework.controller import control_func
 from framework.view import View
 
 # def application(environ, start_response):

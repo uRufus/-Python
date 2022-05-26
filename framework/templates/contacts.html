@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacts</title>
+</head>
+<body>
+<!--    <form onSubmit>-->
+<!--    <input type="text" name="name" placeholder="name"/>-->
+<!--&lt;!&ndash;    <input type="text" className="form-control" name="repo" value={this.state.repo} onChange={(event)=>this.handleChange(event)} />&ndash;&gt;-->
+<!--&lt;!&ndash;    <select multiple onChange={(event)=>this.handleUserChange(event)}>&ndash;&gt;-->
+<!--&lt;!&ndash;        {this.props.users.map((user) => <option value={user.id}> {user.username}</option>)}&ndash;&gt;-->
+<!--&lt;!&ndash;    </select>&ndash;&gt;-->
+<!--    <input type="submit" value="Submit" />-->
+<!--    </form>-->
+    {% block content %}
+      <ul>
+      {% for object in object_list %}
+        <li>{{ object }}</li>
+      {% endfor %}
+      </ul>
+    {% endblock %}
+</body>
+</html>
