@@ -30,6 +30,7 @@ class Framework:
         request = Request(environ)
         view = self._get_view(request)
         response = self._get_response(request, view)
+
         start_response(response.status, list(response.headers.items()))
         return [response.body.encode('UTF-8')]
 
@@ -38,9 +39,9 @@ class Framework:
         for url in self.urls:
             if url.path == path:
                 return url.view
-            return None
+        return None
 
     def _get_response(self, request: Request, view: View):
         if hasattr(view, request.method):
-            return getattr(view, request.method)(view, request)
+            return getattr(view, request.method)(request, view)
         return ['Method is not supported']
