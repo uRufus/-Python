@@ -35,5 +35,20 @@ class Request:
             request_body_size = int(environ.get('CONTENT_LENGTH', 0))
         except ValueError:
             request_body_size = 0
-        return environ['wsgi.input'].read(request_body_size).decode('UTF-8')
+        body = environ['wsgi.input'].read(request_body_size).decode('UTF-8')
+        if self.method == 'get':
+            return body
+        elif self.method == 'post':
+            body_params = {}
+
+            if not body:
+                return {}
+            body = body.split('&')
+            for b_str in body:
+                key, value = b_str.split('=')
+                if body_params.get(key):
+                    body_params[key].append(value)
+                else:
+                    body_params[key] = value
+            return body_params
 

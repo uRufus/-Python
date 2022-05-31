@@ -30,7 +30,10 @@ class Contacts(View):
         return Response(body=output)
 
     def post(self, request):
-        return Response(status='201 Created', body='POST SUCCESS')
+        with open(f'framework/mails/{request.body["theme"]}', mode='w+', encoding='utf-8') as f:
+            for key, value in request.body.items():
+                f.write(f'{key}: {value}\n')
+        return Response(status='201 Created', body='Your message was received')
 
 urls = [
     Url('/index', MainPage),
