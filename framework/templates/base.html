@@ -8,9 +8,9 @@
 </head>
 <body>
     <div>
-		<a href="/index">Главная</a>
-		<a href="contacts">Контакты</a>
-		<a href="/about">О нас</a>
+        {% for object in themes_list %}
+            <a href={{ object.path }}> {{ object.name }}</a>
+        {% endfor %}
     </div>
     {% block content%}
 

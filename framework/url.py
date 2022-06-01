@@ -5,4 +5,5 @@ from framework.view import View
 class Url:
     path: str
     view: View
+    name: str
 

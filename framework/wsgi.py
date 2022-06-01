@@ -9,10 +9,11 @@ class Framework:
         self.urls = urls
 
     def __call__(self, environ, start_response):
-        pprint(environ)
         request = Request(environ)
         view = self._get_view(request)
         response = self._get_response(request, view)
+        if response == ['Method is not supported']:
+            return []
         start_response(response.status, list(response.headers.items()))
         return [response.body.encode('UTF-8')]
 
