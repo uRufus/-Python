@@ -5,12 +5,15 @@ from framework.url import Url
 from framework.view import View
 from framework.response import Response
 from framework.templator import render
+from framework.logger import Logger
 
+logger = Logger
 
 class MainPage(View):
 
     def get(self, request):
         output = render('index.html', object_list='GET SUCCESS', themes_list=urls)
+        logger._log_data('index_file', output)
         return Response(body=output)
 
     def post(self, request):
@@ -31,6 +34,7 @@ class Contacts(View):
 
     def get(self, request):
         output = render('contacts.html', object_list='GET SUCCESS', themes_list=urls)
+        logger._log_data('contacts', output)
         return Response(body=output)
 
     def post(self, request):
