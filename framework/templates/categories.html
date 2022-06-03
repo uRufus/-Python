@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title%}Categories{% endblock %}
+
+{% block content %}
+      <ul>
+      {% for object in object_list %}
+        <li>{{ object }}</li>
+      {% endfor %}
+      </ul>
+    <form action="" method="post" name="post">
+        <p>New category name:</p><input name="category" id="category">
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
