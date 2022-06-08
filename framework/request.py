@@ -1,3 +1,6 @@
+from framework.authentication import login, logout
+
+
 class Request:
 
     def __init__(self, environ):
@@ -7,6 +10,7 @@ class Request:
         self.query_params = self._get_query_params(environ)
         self.body = self._get_body(environ)
         self.addr = environ.get('REMOTE_ADDR')
+        self.auth = self._get_pass()
 
     def _get_headers(self, environ):
         headers = {}
@@ -53,3 +57,13 @@ class Request:
                     body_params[key] = value
             return body_params
 
+    def _get_pass(self):
+        print(self.body)
+        try:
+            if self.body['logout'] == '':
+                return logout(self.addr)
+        except (KeyError, TypeError):
+            try:
+                return login(self.addr, self.body['user_login'], self.body['pass'])
+            except (KeyError, TypeError):
+                return login(self.addr)

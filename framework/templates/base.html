@@ -12,9 +12,10 @@
             <a href={{ object.path }}> {{ object.name }}</a>
         {% endfor %}
     </div>
+    {% include 'profile.html' %}
     {% block content%}
 
     {% endblock %}
-    {% include 'profile.html' %}
+
 </body>
 </html>

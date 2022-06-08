@@ -1,3 +1,5 @@
+
+
 from framework.url import Url
 
 
@@ -10,7 +12,5 @@ class UrlDecorator:
 
 	def __call__(self, view):
 		self.urls.append(Url(self.path, view, self.title))
-
-
 
 

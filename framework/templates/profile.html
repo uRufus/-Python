@@ -1,11 +1,15 @@
-
-{% block title%}Profile{% endblock %}
-
 {% block content %}
-    <form action="" method="post" name="testttts">
-        <p>Login</p><input name="login" id="login">
-        <p>Password</p><input name="password" id="password">
-        <button type="submit">Submit</button>
+    {% if request.auth %}
+    <form action="" method="post" name="logout">
+        <p>User: {{ request.auth }} </p>
+        <button type="submit" name="logout" id="logout">Logout</button>
     </form>
+    {% else %}
+    <form action="" method="post" name="auth">
+        <p>Login</p><input name="user_login" id="user_login">
+        <p>Password</p><input name="pass" id="pass">
+        <button type="submit">Login</button>
+    </form>
+    {% endif %}
 {% endblock %}
 

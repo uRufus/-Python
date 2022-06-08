@@ -3,7 +3,8 @@
 {% block title%}Registration{% endblock %}
 
 {% block content %}
-    <p>{{ message }}</p>
+    <p>{% if message %}{{ message }} {% endif %}</p>
+    <p>Student registration</p>
     <form action="" method="post" name="post">
         <p>Login</p><input name="login" id="login">
         <p>Password</p><input name="password" id="password">
