@@ -15,6 +15,7 @@ logger = Logger
 class MainPage(View):
 
     def get(self, request):
+        print(request.addr)
         output = render('index.html', object_list='GET SUCCESS', themes_list=UrlDecorator.urls)
         logger._log_data('index_file', output)
         return Response(body=output)
@@ -89,12 +90,27 @@ class Courses(View):
             json.dump(courses, f)
         return self.get(self, request)
 
-# urls = [
-#     Url('/', MainPage, 'Главная'),
-#     Url('/about', About, 'О нас'),
-#     Url('/contacts', Contacts, 'Контакты'),
-#     Url('/categories', Categories, 'Categories'),
-#     Url('/courses', Courses, 'Courses'),
-# ]
+
+@UrlDecorator('/registration', 'Registration')
+class Registration(View):
+
+    def get(self, request, message=None):
+        output = render('registration.html', message=message, themes_list=UrlDecorator.urls)
+        return Response(body=output)
+
+    def post(self, request):
+        with open('framework/file_db/users.json', mode='r') as f:
+            users = json.load(f)
+        with open('framework/file_db/users.json', mode='w') as f:
+            key, value = request.body.values()
+            print(key, value)
+            if key in users:
+                message = 'The user already exists'
+            else:
+                users[key] = [value]
+                message = 'The user was created'
+            json.dump(users, f)
+        return self.get(self, request, message)
+
 
 app = Framework(UrlDecorator.urls)

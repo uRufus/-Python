@@ -6,6 +6,7 @@ class Request:
         self.headers = self._get_headers(environ)
         self.query_params = self._get_query_params(environ)
         self.body = self._get_body(environ)
+        self.addr = environ.get('REMOTE_ADDR')
 
     def _get_headers(self, environ):
         headers = {}

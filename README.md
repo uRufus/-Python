@@ -12,3 +12,7 @@ request.py - getting params form request
 response.py - forming response 
 templator.py - rendering web page
 decorators.py - place to create decorators. UrlDecorator is used to map url, view and page's title
+
+Реализовать создание профиля студента (регистрация). 
+Список студентов. 
+Механику записи студента на курс.
