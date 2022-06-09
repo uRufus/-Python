@@ -151,17 +151,17 @@ class AssignCourses(View):
         with open('framework/file_db/assign_courses.json', mode='r') as f:
             assign_courses = json.load(f)
         with open('framework/file_db/assign_courses.json', mode='w') as f:
-            key = request.body.values()
-            print(key)
-            if request.auth in assign_courses:
-                if key in assign_courses[request.auth]:
-                    assign_courses[request.auth][key].update(value)
+            for key, value in request.body.items():
+                if request.auth in assign_courses:
+                    if key in assign_courses[request.auth]:
+                        if value not in assign_courses[request.auth][key]:
+                            assign_courses[request.auth][key].append(value)
+                    else:
+                        assign_courses[request.auth][key] = [value]
                 else:
-                    assign_courses[request.auth][key] = [value]
-            else:
-                assign_courses[request.auth][key] = [value]
-            print(assign_courses)
-            json.dump(assign_courses, f)
+                    assign_courses[request.auth] = {key: [value]}
+                logger._log_data(log=assign_courses, writen_method='console')
+                json.dump(assign_courses, f)
         return self.get(self, request)
 
 app = Framework(UrlDecorator.urls)
