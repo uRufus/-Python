@@ -1,7 +1,7 @@
 import json
 import sqlite3
 
-from framework.data_mapper import UserMapper
+from framework.data_mapper import UserMapper, CategoryMapper, CourseMapper, CourseUserMapper
 from framework.decorators import UrlDecorator
 from framework.wsgi import Framework
 from framework.url import Url
@@ -12,7 +12,9 @@ from framework.logger import Logger
 
 logger = Logger
 user = UserMapper(sqlite3.connect('framework/project_db'))
-
+category = CategoryMapper(sqlite3.connect('framework/project_db'))
+course = CourseMapper(sqlite3.connect('framework/project_db'))
+course_user = CourseUserMapper(sqlite3.connect('framework/project_db'))
 
 @UrlDecorator('/', 'Главная')
 class MainPage(View):
@@ -63,17 +65,13 @@ class Contacts(View):
 class Categories(View):
 
     def get(self, request):
-        categories = []
-        with open('framework/file_db/categories', mode='r', encoding='utf-8') as f:
-            for value in f.readlines():
-                categories.append(value)
+        categories = category.get_list()
         output = render('categories.html', request=request, object_list=categories, themes_list=UrlDecorator.urls)
         return Response(body=output)
 
     def post(self, request):
-        with open('framework/file_db/categories', mode='a', encoding='utf-8') as f:
-            for key, value in request.body.items():
-                f.write(f'\n{value}')
+        for key, value in request.body.items():
+            category.insert(value)
         return self.get(self, request)
 
 
@@ -81,22 +79,14 @@ class Categories(View):
 class Courses(View):
 
     def get(self, request):
-        with open('framework/file_db/courses.json', mode='r') as f:
-            courses = json.load(f)
-        output = render('courses.html', request=request, object_list=courses, themes_list=UrlDecorator.urls)
+        courses = course.get_list()
+        categories = category.get_list()
+        output = render('courses.html', request=request, object_list=courses, categories=categories,
+                        themes_list=UrlDecorator.urls)
         return Response(body=output)
 
     def post(self, request):
-        with open('framework/file_db/courses.json', mode='r') as f:
-            courses = json.load(f)
-        with open('framework/file_db/courses.json', mode='w') as f:
-            key, value = request.body.values()
-            if key in courses:
-                courses[key].append(value)
-            else:
-                courses[key] = [value]
-            print(courses)
-            json.dump(courses, f)
+        course.insert((request.body['course'], request.body['category']))
         return self.get(self, request)
 
 
@@ -139,26 +129,19 @@ class Students(View):
 class AssignCourses(View):
 
     def get(self, request):
-        with open('framework/file_db/courses.json', mode='r') as f:
-            courses = json.load(f)
+
+        courses = course.get_list()
         output = render('assign_courses.html', request=request, object_list=courses, themes_list=UrlDecorator.urls)
         return Response(body=output)
 
     def post(self, request):
-        with open('framework/file_db/assign_courses.json', mode='r') as f:
-            assign_courses = json.load(f)
-        with open('framework/file_db/assign_courses.json', mode='w') as f:
-            for key, value in request.body.items():
-                if request.auth in assign_courses:
-                    if key in assign_courses[request.auth]:
-                        if value not in assign_courses[request.auth][key]:
-                            assign_courses[request.auth][key].append(value)
-                    else:
-                        assign_courses[request.auth][key] = [value]
-                else:
-                    assign_courses[request.auth] = {key: [value]}
-                logger._log_data(log=assign_courses, writen_method='console')
-                json.dump(assign_courses, f)
+        for key, value in request.body.items():
+            assign_courses = course_user.get_list_by_id(request.auth)
+            cat = category.get_id_by_category(key)
+            cour = course.get_id_by_category_id_name(cat[0], value)
+            if cour not in assign_courses:
+                course_user.insert((request.auth, cour[0]))
         return self.get(self, request)
+
 
 app = Framework(UrlDecorator.urls)

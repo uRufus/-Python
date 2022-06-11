@@ -15,9 +15,13 @@
       </ul>
     {% endfor %}
     <form action="" method="post" name="post">
-        <p>Category:</p><input name="category" id="category">
+        <p>Category:</p>
+        <select name="category" id="category">
+            {% for category in categories %}
+              <option value="{{ category[0] }}">{{ category[1] }}</option>
+            {% endfor %}
+        </select>
         <p>New course name:</p><input name="course" id="course">
         <button type="submit">Submit</button>
     </form>
 {% endblock %}
-

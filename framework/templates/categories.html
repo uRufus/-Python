@@ -5,7 +5,7 @@
 {% block content %}
       <ul>
       {% for object in object_list %}
-        <li>{{ object }}</li>
+        <li>{{ object[1] }}</li>
       {% endfor %}
       </ul>
     <form action="" method="post" name="post">

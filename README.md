@@ -12,8 +12,3 @@ request.py - getting params form request
 response.py - forming response 
 templator.py - rendering web page
 decorators.py - place to create decorators. UrlDecorator is used to map url, view and page's title
-
-1. Добавить базу данных к своему проекту
-2. Для этого использовать паттерн Data Mapper
-3. Использовать паттерн Unit of Work
-4. Можно попробовать дополнительно реализовать Identity Map
