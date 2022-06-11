@@ -58,7 +58,6 @@ class Request:
             return body_params
 
     def _get_pass(self):
-        print(self.body)
         try:
             if self.body['logout'] == '':
                 return logout(self.addr)

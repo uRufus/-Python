@@ -1,39 +1,26 @@
 import json
+import sqlite3
 
+from framework.data_mapper import UserMapper, AuthMapper
 
-# def authentication(addr):
-#     with open('framework/file_db/authentication.json', mode='r') as f:
-#         auth = json.load(f)
-#     if addr in auth:
-#         return auth[addr]
-#     return None
+check_user = UserMapper(sqlite3.connect('framework/project_db'))
+auth = AuthMapper(sqlite3.connect('framework/project_db'))
 
 def login(addr, log_in=None, password=None):
-    with open('framework/file_db/authentication.json', mode='r') as f:
-        auth = json.load(f)
-    if addr in auth:
-        return auth[addr]
+    check_auth = auth.find_by_addr(addr)
+    if check_auth:
+        return check_auth[1]
     try:
-        with open('framework/file_db/users.json', mode='r') as f:
-            users = json.load(f)
-            if users[log_in] != password:
-                return None
-            with open('framework/file_db/authentication.json', mode='w') as f:
-                auth[addr] = log_in
-                json.dump(auth, f)
-                return auth[addr]
+        ch_usr = check_user.find_by_login(log_in)
+        if ch_usr is not None and ch_usr[1] == password:
+            auth.insert({addr:ch_usr[0]})
+            return ch_usr[0]
+        else:
+            return None
     except KeyError:
         return None
 
 
 def logout(addr):
-    with open('framework/file_db/authentication.json', mode='r') as f:
-        auth = json.load(f)
-    with open('framework/file_db/authentication.json', mode='w') as f:
-        print(auth)
-        del auth[addr]
-        print(auth)
-        if not auth:
-            auth = {}
-        json.dump(auth, f)
-        return None
+    auth.delete(addr)
+    return None

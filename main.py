@@ -1,5 +1,7 @@
 import json
+import sqlite3
 
+from framework.data_mapper import UserMapper
 from framework.decorators import UrlDecorator
 from framework.wsgi import Framework
 from framework.url import Url
@@ -9,6 +11,7 @@ from framework.templator import render
 from framework.logger import Logger
 
 logger = Logger
+user = UserMapper(sqlite3.connect('framework/project_db'))
 
 
 @UrlDecorator('/', 'Главная')
@@ -107,17 +110,13 @@ class Registration(View):
     def post(self, request):
         try:
             if request.body['login']:
-                with open('framework/file_db/users.json', mode='r') as f:
-                    users = json.load(f)
-                with open('framework/file_db/users.json', mode='w') as f:
-                    key, value = request.body.values()
-                    if key in users:
-                        message = 'The user already exists'
-                    else:
-                        users[key] = value
-                        message = 'The user was created'
-                    json.dump(users, f)
-                return self.get(self, request, message)
+                key, value = request.body.values()
+                if user.find_by_login(key):
+                    message = 'The user already exists'
+                else:
+                    user.insert({key: value})
+                    message = 'The user was created'
+            return self.get(self, request, message)
         except KeyError:
             return self.get(self, request)
 
@@ -126,14 +125,12 @@ class Registration(View):
 class Students(View):
 
     def get(self, request):
-        with open('framework/file_db/users.json', mode='r') as f:
-            students = json.load(f)
+        students = user.get_list()
         output = render('students_list.html', request=request, students=students, themes_list=UrlDecorator.urls)
         return Response(body=output)
 
     def post(self, request):
-        with open('framework/file_db/users.json', mode='r') as f:
-            students = json.load(f)
+        students = user.get_list()
         output = render('students_list.html', request=request, students=students, themes_list=UrlDecorator.urls)
         return Response(body=output)
 
