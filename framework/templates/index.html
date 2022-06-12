@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>index</title>
-</head>
-<body>
-    <p>Main page</p>
-    {% block content %}
-      <ul>
-      {% for object in object_list %}
-        <li>{{ object }}</li>
-      {% endfor %}
-      </ul>
-    {% endblock %}
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title%}About page{% endblock %}
+
+{% block content %}
+<h1>Main page</h1>
+<p>
+    This is main page
+</p>
+{% endblock %}
+
