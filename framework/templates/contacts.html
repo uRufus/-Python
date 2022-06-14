@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title%}About page{% endblock %}
+
+{% block content %}
+<h1>Contact page</h1>
+<p>
+    This is Contact page
+</p>
+<form action="" method="post" name="post">
+    <p>Theme:</p><input name="theme" id="theme">
+    <p>Text:</p><input name="text" id="text">
+    <p>Mail:</p><input name="email" id="email">
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
